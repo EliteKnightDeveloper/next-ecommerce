@@ -1,11 +1,13 @@
 import { Fragment } from 'react'
-import Document, { Head, Main, NextScript } from 'next/document'
-
+import Document, { Head, Main, NextScript, DocumentInitialProps, DocumentContext } from 'next/document'
 import { GA_TRACKING_ID } from '../utils/gtag';
 
-export default class CustomDocument extends Document {
-  static async getInitialProps(ctx) {
-    const originalRenderPage = ctx.renderPage
+interface DocumentProps extends DocumentInitialProps {
+  isProduction: boolean
+}
+
+export default class CustomDocument extends Document<DocumentProps> {
+  static async getInitialProps(ctx: DocumentContext): Promise<DocumentProps> {
     const initialProps = await Document.getInitialProps(ctx)
 
     // Check if in production

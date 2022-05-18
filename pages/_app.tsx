@@ -2,6 +2,9 @@ import React, { Fragment } from 'react';
 import Router from 'next/router';
 import {wrapper} from '../store';
 
+// types
+import type { AppProps } from 'next/app';
+
 // global styles
 import 'swiper/swiper.scss';
 import 'rc-slider/assets/index.css';
@@ -16,10 +19,10 @@ const isProduction = process.env.NODE_ENV === 'production';
 if(isProduction) {
   
   // Notice how we track pageview when route is changed
-  Router.events.on('routeChangeComplete', (url) => gtag.pageview(url));
+  Router.events.on('routeChangeComplete', (url: string) => gtag.pageview(url));
 }
 
-const MyApp = ({Component, pageProps}) => (
+const MyApp = ({ Component, pageProps }: AppProps) => (
   <Fragment>
     <Component {...pageProps} />
   </Fragment>
