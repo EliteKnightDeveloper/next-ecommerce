@@ -1,28 +1,20 @@
-import { createStore, applyMiddleware, combineReducers } from 'redux';
-import thunkMiddleware from "redux-thunk";
-import { createWrapper, HYDRATE } from 'next-redux-wrapper';
+import { configureStore } from '@reduxjs/toolkit'
+import { createWrapper } from 'next-redux-wrapper';
 import cartReducer from './reducers/cart';
 import userReducer from './reducers/user';
 
 //COMBINING ALL REDUCERS
-const combinedReducer = combineReducers({
+const reducer = {
   cart: cartReducer,
   user: userReducer
-});
+}
 
-// BINDING MIDDLEWARE
-const bindMiddleware = (middleware) => {
-  if (process.env.NODE_ENV !== "production") {
-    const { composeWithDevTools } = require("redux-devtools-extension");
-    return composeWithDevTools(applyMiddleware(...middleware));
-  }
-  return applyMiddleware(...middleware);
-};
-
-const makeStore = ({ isServer }) => {
+const makeStore = ({ isServer }: { isServer: Boolean }) => {
   if (isServer) {
     //If it's on server side, create a store
-    return createStore(combinedReducer, bindMiddleware([thunkMiddleware]));
+    return configureStore({ 
+      reducer,
+    });
   } else {
     //If it's on client side, create a store which will persist
     const { persistStore, persistReducer } = require("redux-persist");
@@ -34,12 +26,11 @@ const makeStore = ({ isServer }) => {
       storage, // if needed, use a safer storage
     };
 
-    const persistedReducer = persistReducer(persistConfig, combinedReducer); // Create a new reducer with our existing reducer
+    const persistedReducer = persistReducer(persistConfig, reducer); // Create a new reducer with our existing reducer
 
-    const store = createStore(
-      persistedReducer,
-      bindMiddleware([thunkMiddleware])
-    ); // Creating the store again
+    const store = configureStore({ 
+      reducer: persistedReducer,
+    }); // Creating the store again
 
     store.__persistor = persistStore(store); // This creates a persistor object & push that persisted object to .__persistor, so that we can avail the persistability feature
 
