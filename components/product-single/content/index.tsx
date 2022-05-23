@@ -6,17 +6,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { some } from 'lodash';
 import { addProduct } from './../../../store/actions/cartActions';
 import { toggleFavProduct } from './../../../store/actions/userActions';
+import { ProductType } from 'types/product';
+import { RootState } from 'store';
 
-const Content = ({ product }) => {
+type ProductContent = {
+  product: ProductType;
+}
+
+const Content = ({ product }: ProductContent) => {
   const dispatch = useDispatch();
-  const [count, setCount] = useState(1);
-  const [color, setColor] = useState('');
-  const [itemSize, setItemSize] = useState('');
+  const [count, setCount] = useState<number>(1);
+  const [color, setColor] = useState<string>('');
+  const [itemSize, setItemSize] = useState<string>('');
 
-  const onColorSet = (e) => setColor(e);
-  const onSelectChange = (e) => setItemSize(e.target.value);
+  const onColorSet = (e: string) => setColor(e);
+  const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => setItemSize(e.target.value);
 
-  const { favProducts } = useSelector(state => state.user);
+  const { favProducts } = useSelector((state: RootState) => state.user);
   const isFavourite = some(favProducts, productId => productId === product.id);
 
   const toggleFav = () => {
@@ -32,7 +38,7 @@ const Content = ({ product }) => {
       { 
         id: product.id,
         name: product.name,
-        thumb: product.images[0],
+        thumb: product.images ? product.images[0] : '',
         price: product.currentPrice,
         count: count,
         color: color,

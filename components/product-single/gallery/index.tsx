@@ -1,4 +1,8 @@
-const Gallery = ({ images }) => {
+type GalleryProductType = {
+  images: string[]
+}
+
+const Gallery = ({ images }: GalleryProductType) => {
   const featImage = images[0];
 
   return (

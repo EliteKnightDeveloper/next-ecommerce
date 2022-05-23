@@ -1,4 +1,8 @@
-const Description = ({ show }) => {
+type ProductDescriptionType = {
+  show: boolean;
+}
+
+const Description = ({ show }: ProductDescriptionType) => {
   const style = {
     display: show ? 'flex' : 'none',
   }
