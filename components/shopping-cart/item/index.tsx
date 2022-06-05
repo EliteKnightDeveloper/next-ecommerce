@@ -1,6 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { removeProduct } from './../../../store/actions/cartActions';
-import { setCount } from './../../../store/actions/cartActions';
+import { removeProduct, setCount } from 'store/reducers/cart';
 
 const ShoppingCart = ({ thumb, name, id, color, size, count, price }) => {
   const dispatch = useDispatch();
@@ -20,14 +19,17 @@ const ShoppingCart = ({ thumb, name, id, color, size, count, price }) => {
       return false;
     }
 
-    dispatch(setCount(
-      { 
+    const payload = {
+      product: { 
         id: id,
         color: color,
         size: size,
         count: count,
-      }
-    ))
+      },
+      count,
+    }
+
+    dispatch(setCount(payload))
   }
 
   return (
