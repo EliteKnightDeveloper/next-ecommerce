@@ -1,6 +1,16 @@
-const CheckboxColor = ({ color, name, type, onChange, valueName }) => {
-  const onSelect = (e) => {
-    onChange(e.target.getAttribute('data-name'));
+type CheckboxColorType = {
+	type?: string;
+	name: string;
+  color: string;
+  valueName: string;
+	onChange?: (value: string) => void;
+}
+
+const CheckboxColor = ({ color, name, type = 'checkbox', onChange, valueName }: CheckboxColorType) => {
+  const onSelect = (e: any) => {
+    if(onChange) {
+      onChange(e.target.getAttribute('data-name'));
+    }
   }
 
   return (
@@ -11,10 +21,6 @@ const CheckboxColor = ({ color, name, type, onChange, valueName }) => {
       </span>
     </label>
   )
-};
-
-CheckboxColor.defaultProps = {
-  type: 'checkbox',
 };
   
 export default CheckboxColor;
